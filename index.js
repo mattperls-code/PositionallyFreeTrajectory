@@ -15,18 +15,17 @@ const maxDy = 5
 const scale = Math.min((canvas.width - 2 * inset) / maxDx, (canvas.height - 2 * inset) / maxDy)
 
 const determineTrajectory = (g, dx, dy, alpha) => {
-  const finalVelocity = -dx / (Math.cos(alpha) * Math.sqrt(2 * (dx * Math.tan(alpha) - dy) / g))
+  const finalVelocity = -dx / Math.cos(alpha) / Math.sqrt(2 * (dx * Math.tan(alpha) - dy) / g)
   const u = finalVelocity ** 2 * Math.sin(alpha) ** 2 - 2 * g * dy
   const qA = g * dx ** 2
   const qB = -2 * u * dx
   const qC = -2 * u * dy
 
-  let theta = Math.atan((-qB + Math.sqrt(qB ** 2 - 4 * qA * qC)) / (2 * qA))
-  theta = Math.atan2(Math.sin(theta), -Math.cos(theta))
+  const theta = Math.atan2(-qB + Math.sqrt(qB ** 2 - 4 * qA * qC), -2 * qA)
   const speed = dx / Math.cos(theta) / Math.sqrt(2 * (dy - dx * Math.tan(theta)) / g)
   const time = dx / speed / Math.cos(theta)
 
-  const realAlpha = Math.atan((speed * Math.cos(theta)) / (speed * Math.sin(theta) + g * time))
+  const realAlpha = Math.atan((speed * Math.cos(theta)) / (speed * Math.sin(theta) + g * time)) * 180 / Math.PI
 
   return { theta, speed, time, realAlpha }
 }
