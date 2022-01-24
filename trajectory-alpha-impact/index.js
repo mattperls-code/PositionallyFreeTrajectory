@@ -6,8 +6,7 @@ const given = {
   g: -9.8,
   dx: 5,
   dy: 3.5,
-  // 270 + desired angle of impact
-  alpha: (270 + 30) * Math.PI / 180
+  alpha: 45 * Math.PI / 180
 }
 
 const maxDx = 10
@@ -15,13 +14,13 @@ const maxDy = 5
 const scale = Math.min((canvas.width - 2 * inset) / maxDx, (canvas.height - 2 * inset) / maxDy)
 
 const determineTrajectory = (g, dx, dy, alpha) => {
-  const finalVelocity = -dx / Math.cos(alpha) / Math.sqrt(2 * (dx * Math.tan(alpha) - dy) / g)
+  const finalVelocity = dx / Math.cos(alpha) / Math.sqrt(2 * (-dy - dx * Math.tan(alpha)) / g)
   const u = finalVelocity ** 2 * Math.sin(alpha) ** 2 - 2 * g * dy
   const qA = g * dx ** 2
-  const qB = -2 * u * dx
+  const qB = 2 * u * dx
   const qC = -2 * u * dy
 
-  const theta = Math.atan2(-qB + Math.sqrt(qB ** 2 - 4 * qA * qC), -2 * qA)
+  const theta = Math.atan2(-qB - Math.sqrt(qB ** 2 - 4 * qA * qC), 2 * qA)
   const speed = dx / Math.cos(theta) / Math.sqrt(2 * (dy - dx * Math.tan(theta)) / g)
   const time = dx / speed / Math.cos(theta)
 
@@ -46,7 +45,7 @@ const run = () => {
   ctx.fill()
 
   const trajectory = determineTrajectory(given.g, given.dx, given.dy, given.alpha)
-  console.log("observed: " + (trajectory.realAlpha * 180 / Math.PI))
+  console.log("observed: " + trajectory.realAlpha)
 
   const pointAtTime = (t) => ({
     x: trajectory.speed * Math.cos(trajectory.theta) * t,
@@ -70,16 +69,16 @@ const run = () => {
 run()
 
 document.getElementById("dx").addEventListener("input", (e) => {
-  given.dx = e.target.value
+  given.dx = parseFloat(e.target.value)
   run()
 })
 
 document.getElementById("dy").addEventListener("input", (e) => {
-  given.dy = e.target.value
+  given.dy = parseFloat(e.target.value)
   run()
 })
 
 document.getElementById("alpha").addEventListener("input", (e) => {
-  given.alpha = (e.target.value) * Math.PI / 180
+  given.alpha = parseFloat(e.target.value) * Math.PI / 180
   run()
 })

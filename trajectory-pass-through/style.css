@@ -1,11 +1,11 @@
 @font-face {
     font-family: Lato;
-    src: url("./assets/Lato/Lato-Regular.ttf");
+    src: url("../assets/Lato/Lato-Regular.ttf");
 }
 
 @font-face {
     font-family: Roboto;
-    src: url("./assets/Roboto/Roboto-Regular.ttf");
+    src: url("../assets/Roboto/Roboto-Regular.ttf");
 }
 
 body {
@@ -41,7 +41,7 @@ canvas {
   
 .param {
     display: flex;
-    width: 220px;
+    width: 160px;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -56,5 +56,5 @@ b {
 }
   
 input {
-    width: 100px;
+    width: 80px;
 }
